@@ -1,4 +1,4 @@
-name: 'Microsoft Teams Notifications'
+name: 'Microsoft Teams Notifications Card'
 description: 'Send a custom notification message to a Microsoft Teams channel with GitHub repo details'
 branding:
   icon: message-circle
