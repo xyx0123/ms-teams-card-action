@@ -1,9 +1,11 @@
 import * as core from '@actions/core'
 import {Octokit} from '@octokit/rest'
+
 import dayjs from 'dayjs'
-import {createMessageCard} from './message-card'
-import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
+import timezone from 'dayjs/plugin/timezone'
+
+import {createMessageCard} from './message-card'
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
@@ -18,18 +20,18 @@ async function run(): Promise<void> {
     const notificationSummary =
       core.getInput('notification-summary') || 'GitHub Action Notification'
     const notificationColor = core.getInput('notification-color') || '0b93ff'
-    const timezone = core.getInput('timezone') || 'UTC'
+    const timezoneInput = core.getInput('timezone') || 'UTC'
 
     const timestamp = dayjs()
-      .tz(timezone)
-      .format('dddd, MMMM Do YYYY, h:mm:ss a z')
+      .tz(timezoneInput)
+      .format('dddd, MMMM D YYYY, h:mm:ss a')
 
     const [owner, repo] = (process.env.GITHUB_REPOSITORY || '').split('/')
     const sha = process.env.GITHUB_SHA || ''
     const runId = process.env.GITHUB_RUN_ID || ''
     const runNum = process.env.GITHUB_RUN_NUMBER || ''
     const params = {owner, repo, ref: sha}
-    const repoName = params.owner + '/' + params.repo
+    const repoName = `${params.owner}/${params.repo}`
     const repoUrl = `https://github.com/${repoName}`
 
     const octokit = new Octokit({auth: `token ${githubToken}`})

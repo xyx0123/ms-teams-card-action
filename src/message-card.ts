@@ -10,20 +10,15 @@ export function createMessageCard(
   repoUrl: string,
   timestamp: string
 ): any {
-  let avatar_url = 'https://assets.gor918.com/latest/logos/logo.svg'
+  const avatar_url = author?.avatar_url
+    ? author.avatar_url
+    : 'https://www.cdnlogo.com/logos/g/69/github-icon.svg'
 
-  if (author) {
-    if (author.avatar_url) {
-      avatar_url = author.avatar_url
-    }
-  }
+  const author_url =
+    author?.login && author.html_url
+      ? `[(@${author.login})](${author.html_url}) `
+      : ''
 
-  let author_url = ''
-  if (author) {
-    if (author.login && author.html_url) {
-      author_url = `[(@${author.login})](${author.html_url}) `
-    }
-  }
   const messageCard = {
     '@type': 'MessageCard',
     '@context': 'https://schema.org/extensions',
@@ -32,28 +27,25 @@ export function createMessageCard(
     title: notificationSummary,
     sections: [
       {
-        activityTitle: `**CI #${runNum} (commit ${sha.substring(
-          0,
-          7
-        )})** on [${repoName}](${repoUrl})`,
+        activityTitle: `**CI #${runNum} (commit ${sha.substring(0, 7)})** on [${repoName}](${repoUrl})`,
         activityImage: avatar_url,
         activitySubtitle: `by ${commit.data.commit.author.name} ${author_url}on ${timestamp}`
       }
     ],
     potentialAction: [
-      {
-        '@context': 'http://schema.org',
-        target: [`${repoUrl}/actions/runs/${runId}`],
-        '@type': 'ViewAction',
-        name: 'View Workflow Run'
-      },
-      {
-        '@context': 'http://schema.org',
-        target: [commit.data.html_url],
-        '@type': 'ViewAction',
-        name: 'View Commit Changes'
-      }
+      createAction('View Workflow Run', `${repoUrl}/actions/runs/${runNum}`),
+      createAction('View Commit Changes', commit.data.html_url)
     ]
   }
+
   return messageCard
+}
+
+function createAction(name: string, target: string): any {
+  return {
+    '@context': 'http://schema.org',
+    target: [target],
+    '@type': 'ViewAction',
+    name
+  }
 }
