@@ -1,0 +1,60 @@
+name: "Build & Test"
+on:
+  repository_dispatch:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install pnpm
+      shell: bash
+      run: npm install -g pnpm@8
+
+    - uses: actions/checkout@v4
+    - run: |
+        pnpm install
+        pnpm run all
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: ./
+      with: 
+        github-token: ${{ github.token }}
+        ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
+        notification-summary: Deployment Started 
+        notification-color: 17a2b8
+        timezone: Europe/Berlin 
+    - uses: ./
+      with: 
+        github-token: ${{ github.token }}
+        ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
+        notification-summary: Something went wrong!
+        notification-color: ffc107
+        timezone: Europe/Berlin
+    - uses: ./
+      with: 
+        github-token: ${{ github.token }}
+        ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
+        notification-summary: Failed to deploy
+        notification-color: dc3545
+        timezone: Europe/Berlin
+    - uses: ./
+      with: 
+        github-token: ${{ github.token }}
+        ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
+        notification-summary: All good!
+        notification-color: 28a745 
+        timezone: Europe/Berlin
+    - uses: ./
+      with: 
+        github-token: ${{ github.token }}
+        ms-teams-webhook-uri: ${{ secrets.MS_TEAMS_WEBHOOK_URI }}
+        notification-summary: "Emoji! &#x1F6A2​​ &#x2705;"
+        notification-color: 28a745 
+        timezone: Europe/Berlin
