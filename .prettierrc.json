@@ -1,10 +1,14 @@
 {
-    "printWidth": 80,
-    "tabWidth": 2,
-    "useTabs": false,
-    "semi": false,
+    "proseWrap": "always",
+    "quoteProps": "as-needed",
+    "semi": true,
     "singleQuote": true,
-    "trailingComma": "none",
-    "bracketSpacing": false,
-    "parser": "typescript"
-  }
+    "trailingComma": "es5",
+    "useTabs": false,
+    "tabWidth": 2,
+    "bracketSpacing": true,
+    "printWidth": 120,
+    "arrowParens": "always",
+    "importOrderCaseInsensitive": true,
+    "importOrderSeparation": true
+}
