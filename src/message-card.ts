@@ -8,7 +8,8 @@ export function createMessageCard(
   repoName: string,
   sha: string,
   repoUrl: string,
-  timestamp: string
+  timestamp: string,
+  prNum: string
 ): any {
   const avatar_url = author?.avatar_url ? author.avatar_url : 'https://www.cdnlogo.com/logos/g/69/github-icon.svg';
 
@@ -22,7 +23,7 @@ export function createMessageCard(
     title: notificationSummary,
     sections: [
       {
-        activityTitle: `**CI #${runNum} (commit ${sha.substring(0, 7)})** on [${repoName}](${repoUrl})`,
+        activityTitle: `New pull request on [${repoName}](${repoUrl})`,
         activityImage: avatar_url,
         activitySubtitle: `by ${commit.data.commit.author.name} ${author_url}on ${timestamp}`,
       },
@@ -30,15 +31,9 @@ export function createMessageCard(
     potentialAction: [
       {
         '@context': 'http://schema.org',
-        target: [`${repoUrl}/actions/runs/${runId}`],
+        target: [`${repoUrl}/pull/${prNum}`],
         '@type': 'ViewAction',
-        name: 'View Workflow Run',
-      },
-      {
-        '@context': 'http://schema.org',
-        target: [commit.data.html_url],
-        '@type': 'ViewAction',
-        name: 'View Commit Changes',
+        name: 'Go to Approve',
       },
     ],
   };
