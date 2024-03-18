@@ -29,7 +29,7 @@ async function run(): Promise<void> {
     const runNum = process.env.GITHUB_RUN_NUMBER ?? '';
     const params = { owner, repo, ref: sha };
     const repoName = `${params.owner}/${params.repo}`;
-    const repoUrl = `https://github.com/${repoName}`;
+    const repoUrl = `https://atc-github.com/${repoName}`;
     const octokit = new Octokit({ auth: `token ${githubToken}` });
     const commit = await octokit.repos.getCommit(params);
     const author = commit.data.author;
