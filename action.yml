@@ -19,6 +19,11 @@ inputs:
   timezone:
     description: 'Timezone (ex. Europe/Berlin)'
     required: false
+  github-enterprise-host:
+    description: 'Enterprise github host'
+    required: false
+    default: github.com
+
 runs:
   using: 'node20'
   main: 'dist/index.js'

@@ -27,12 +27,21 @@ async function run(): Promise<void> {
     const sha = process.env.GITHUB_SHA ?? '';
     const runId = process.env.GITHUB_RUN_ID ?? '';
     const runNum = process.env.GITHUB_RUN_NUMBER ?? '';
+    const prNum = process.env.PR_NUMBER ?? '';
     const params = { owner, repo, ref: sha };
     const repoName = `${params.owner}/${params.repo}`;
-    const repoUrl = `https://atc-github.com/${repoName}`;
-    const octokit = new Octokit({ auth: `token ${githubToken}` });
+
+    const githubHost = core.getInput('github-enterprise-host', { required: false });
+
+    const repoUrl = `https://${githubHost}/${repoName}`;
+    const baseApiUrl = `https://${githubHost}/api/v3`;
+
+    const octokit = new Octokit({ baseUrl: baseApiUrl,auth: `token ${githubToken}` });
     const commit = await octokit.repos.getCommit(params);
     const author = commit.data.author;
+
+    console.log(prNum)
+    console.log(commit);
 
     const messageCard = await createMessageCard(
       notificationSummary,
@@ -44,7 +53,8 @@ async function run(): Promise<void> {
       repoName,
       sha,
       repoUrl,
-      timestamp
+      timestamp,
+        prNum,
     );
 
     console.log(messageCard);
