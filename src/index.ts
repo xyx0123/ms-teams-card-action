@@ -6,6 +6,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 
 import { createMessageCard } from './message-card';
+import {createTextMessageCard} from "./text-card";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -43,18 +44,23 @@ async function run(): Promise<void> {
     console.log(prNum)
     console.log(commit);
 
-    const messageCard = await createMessageCard(
+    // const messageCard = await createMessageCard(
+    //   notificationSummary,
+    //   notificationColor,
+    //   commit,
+    //   author,
+    //   runNum,
+    //   runId,
+    //   repoName,
+    //   sha,
+    //   repoUrl,
+    //   timestamp,
+    //     prNum,
+    // );
+
+    const messageCard = await createTextMessageCard(
       notificationSummary,
-      notificationColor,
-      commit,
-      author,
-      runNum,
-      runId,
-      repoName,
-      sha,
-      repoUrl,
-      timestamp,
-        prNum,
+      notificationColor
     );
 
     console.log(messageCard);
