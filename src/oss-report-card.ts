@@ -1,7 +1,8 @@
-export function createTextMessageCard(
+export function createOssReportMessageCard(
   notificationSummary: string,
   notificationColor: string,
-  briefMessage: string
+  briefMessage: string,
+  account: string
 ): any {
   // Convert bytes to readable format
   function formatBytes(bytes: number): string {
@@ -20,8 +21,8 @@ export function createTextMessageCard(
   try {
     const datapoints = JSON.parse(briefMessage);
     facts = datapoints.map((dp: any) => ({
-      name: `📦 ${dp.BucketName}`,
-      value: `📈 ${formatBytes(dp.Value)}\n📍 ${dp.region}\n🕒 ${formatTime(dp.timestamp)}`,
+      name: `🪣 ${dp.BucketName}`,
+      value: `📊 ${formatBytes(dp.Value)}\n👥 ${account}\n🕒 ${formatTime(dp.timestamp)}`,
     }));
   } catch (error: unknown) {
     const errMsg = error instanceof Error ? error.message : 'Invalid JSON';

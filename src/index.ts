@@ -6,7 +6,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 
 import { createMessageCard } from './message-card';
-import { createTextMessageCard } from './text-card';
+import { createOssReportMessageCard } from './oss-report-card';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -35,6 +35,7 @@ async function run(): Promise<void> {
     const githubHost = core.getInput('github-enterprise-host', { required: false });
 
     const briefMessage = core.getInput('brief-message', { required: false });
+    const account = core.getInput('account', { required: false });
 
     const repoUrl = `https://${githubHost}/${repoName}`;
     const baseApiUrl = `https://${githubHost}/api/v3`;
@@ -60,7 +61,7 @@ async function run(): Promise<void> {
     //     prNum,
     // );
 
-    const messageCard = await createTextMessageCard(notificationSummary, notificationColor, briefMessage);
+    const messageCard = await createOssReportMessageCard(notificationSummary, notificationColor, briefMessage, account);
 
     console.log(messageCard);
 

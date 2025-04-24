@@ -26,7 +26,9 @@ inputs:
   brief-message:
     description: 'This is used as text filed of message card'
     required: false
-
+  account:
+    description: 'The OSS belongs to which account'
+    required: false
 runs:
   using: 'node20'
   main: 'dist/index.js'
