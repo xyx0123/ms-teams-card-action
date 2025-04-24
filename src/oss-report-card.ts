@@ -22,7 +22,7 @@ export function createOssReportMessageCard(
     const datapoints = JSON.parse(briefMessage);
     facts = datapoints.map((dp: any) => ({
       name: `🪣 ${dp.BucketName}`,
-      value: `📊 ${formatBytes(dp.Value)}\n👥 ${account}\n🕒 ${formatTime(dp.timestamp)}`,
+      value: `📊 ${formatBytes(dp.Value)}🕒 ${formatTime(dp.timestamp)}`,
     }));
   } catch (error: unknown) {
     const errMsg = error instanceof Error ? error.message : 'Invalid JSON';
@@ -37,7 +37,7 @@ export function createOssReportMessageCard(
     title: notificationSummary,
     sections: [
       {
-        activityTitle: `Usage of Ali Cloud OSS`,
+        activityTitle: '(👥' + account + ')' + `Usage of Ali Cloud OSS`,
         // text: briefMessage,
         facts: facts,
         markdown: true,
