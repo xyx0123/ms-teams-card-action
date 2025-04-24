@@ -6,7 +6,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 
 import { createMessageCard } from './message-card';
-import {createTextMessageCard} from "./text-card";
+import { createTextMessageCard } from './text-card';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -39,11 +39,11 @@ async function run(): Promise<void> {
     const repoUrl = `https://${githubHost}/${repoName}`;
     const baseApiUrl = `https://${githubHost}/api/v3`;
 
-    const octokit = new Octokit({ baseUrl: baseApiUrl,auth: `token ${githubToken}` });
+    const octokit = new Octokit({ baseUrl: baseApiUrl, auth: `token ${githubToken}` });
     const commit = await octokit.repos.getCommit(params);
     const author = commit.data.author;
 
-    console.log(prNum)
+    console.log(prNum);
     console.log(commit);
 
     // const messageCard = await createMessageCard(
@@ -60,11 +60,7 @@ async function run(): Promise<void> {
     //     prNum,
     // );
 
-    const messageCard = await createTextMessageCard(
-      notificationSummary,
-      notificationColor,
-      briefMessage,
-    );
+    const messageCard = await createTextMessageCard(notificationSummary, notificationColor, briefMessage);
 
     console.log(messageCard);
 

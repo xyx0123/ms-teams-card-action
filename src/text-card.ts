@@ -1,31 +1,49 @@
 export function createTextMessageCard(
-    notificationSummary: string,
-    notificationColor: string,
-    briefMessage: string
+  notificationSummary: string,
+  notificationColor: string,
+  briefMessage: string
 ): any {
-    const messageCard = {
-        '@type': 'MessageCard',
-        '@context': 'https://schema.org/extensions',
-        summary: notificationSummary,
-        themeColor: notificationColor,
-        title: notificationSummary,
-        sections: [
-            {
-                activityTitle: `Usage of Ali Cloud OSS`,
-                text: briefMessage,
-                // activityImage: avatar_url,
-                // activitySubtitle: `by ${commit.data.commit.author.name} ${author_url}on ${timestamp}`,
-            },
-        ],
-        potentialAction: [
-            // {
-            //     '@context': 'http://schema.org',
-            //     target: [`${repoUrl}/pull/${prNum}`],
-            //     '@type': 'ViewAction',
-            //     name: 'Go to Approve',
-            // },
-        ],
-    };
+  // Convert bytes to readable format
+  function formatBytes(bytes: number): string {
+    if (bytes === 0) return '0 B';
+    const units = ['B', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    return `${(bytes / Math.pow(1024, i)).toFixed(2)} ${units[i]}`;
+  }
 
-    return messageCard;
+  // Format timestamp into China local time
+  function formatTime(ms: number): string {
+    return new Date(ms).toLocaleString('zh-CN', { timeZone: 'Asia/Shanghai' });
+  }
+  let facts: { name: string; value: string }[] = [];
+
+  try {
+    const datapoints = JSON.parse(briefMessage);
+    facts = datapoints.map((dp: any) => ({
+      name: `📦 ${dp.BucketName}`,
+      value: `📈 ${formatBytes(dp.Value)}\n📍 ${dp.region}\n🕒 ${formatTime(dp.timestamp)}`,
+    }));
+  } catch (error: unknown) {
+    const errMsg = error instanceof Error ? error.message : 'Invalid JSON';
+    facts = [{ name: 'Error parsing datapoints', value: errMsg }];
+  }
+
+  const messageCard = {
+    '@type': 'MessageCard',
+    '@context': 'https://schema.org/extensions',
+    summary: notificationSummary,
+    themeColor: notificationColor,
+    title: notificationSummary,
+    sections: [
+      {
+        activityTitle: `Usage of Ali Cloud OSS`,
+        // text: briefMessage,
+        facts: facts,
+        markdown: true,
+      },
+    ],
+    potentialAction: [],
+  };
+
+  return messageCard;
 }
