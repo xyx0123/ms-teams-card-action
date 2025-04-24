@@ -8,11 +8,11 @@ export function createTextMessageCard(
         '@context': 'https://schema.org/extensions',
         summary: notificationSummary,
         themeColor: notificationColor,
-        title: briefMessage,
+        title: notificationSummary,
         sections: [
             {
                 activityTitle: `Usage of Ali Cloud OSS`,
-                text: "oss information",
+                text: briefMessage,
                 // activityImage: avatar_url,
                 // activitySubtitle: `by ${commit.data.commit.author.name} ${author_url}on ${timestamp}`,
             },
