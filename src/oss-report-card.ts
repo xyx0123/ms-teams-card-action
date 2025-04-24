@@ -19,8 +19,20 @@ export function createOssReportMessageCard(
   let facts: { name: string; value: string }[] = [];
 
   try {
-    const datapoints = JSON.parse(briefMessage);
-    facts = datapoints.map((dp: any) => ({
+    const rawDatapoints = JSON.parse(briefMessage);
+    // Deduplicate based on key fields
+    const map = new Map<string, any>();
+    rawDatapoints.forEach((dp: any) => {
+      const key = `${dp.BucketName}-${dp.storageType}-${dp.region}-${dp.userId}`;
+      const existing = map.get(key);
+      if (!existing || dp.timestamp > existing.timestamp) {
+        map.set(key, dp);
+      }
+    });
+
+    const dedupedDatapoints = Array.from(map.values());
+
+    facts = dedupedDatapoints.map((dp: any) => ({
       name: `🪣 ${dp.BucketName}`,
       value: `📊 ${formatBytes(dp.Value)}🕒 ${formatTime(dp.timestamp)}`,
     }));
