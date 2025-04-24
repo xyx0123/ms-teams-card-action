@@ -23,6 +23,9 @@ inputs:
     description: 'Enterprise github host'
     required: false
     default: github.com
+  brief-message:
+    description: 'This is used as text filed of message card'
+    required: false
 
 runs:
   using: 'node20'

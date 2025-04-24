@@ -34,6 +34,8 @@ async function run(): Promise<void> {
 
     const githubHost = core.getInput('github-enterprise-host', { required: false });
 
+    const briefMessage = core.getInput('brief-message', { required: false });
+
     const repoUrl = `https://${githubHost}/${repoName}`;
     const baseApiUrl = `https://${githubHost}/api/v3`;
 
@@ -60,7 +62,8 @@ async function run(): Promise<void> {
 
     const messageCard = await createTextMessageCard(
       notificationSummary,
-      notificationColor
+      notificationColor,
+      briefMessage,
     );
 
     console.log(messageCard);

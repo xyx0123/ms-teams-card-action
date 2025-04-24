@@ -1,13 +1,14 @@
 export function createTextMessageCard(
     notificationSummary: string,
-    notificationColor: string
+    notificationColor: string,
+    briefMessage: string
 ): any {
     const messageCard = {
         '@type': 'MessageCard',
         '@context': 'https://schema.org/extensions',
         summary: notificationSummary,
         themeColor: notificationColor,
-        title: notificationSummary,
+        title: briefMessage,
         sections: [
             {
                 activityTitle: `Usage of Ali Cloud OSS`,
