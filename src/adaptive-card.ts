@@ -10,18 +10,18 @@ export function createAdaptiveCard(
     repoUrl: string,
     timestamp: string,
     prNum: string,
-    enterpriseHost: string
 ): any {
     const authorLogin = author?.login ?? 'unknown';
 
-    const authorId = author?.id;
-
-    const avatarUrl = authorId
-        ? `${enterpriseHost}/avatars/u/${authorId}`
-        : `${enterpriseHost}/images/modules/logos_page/GitHub-Mark.png`;
+    const avatarUrl = commit.data.author?.avatar_url;
+    
+    console.log("avatarUrl",avatarUrl);
 
     const authorName = commit?.data?.commit?.author?.name ?? 'Unknown';
     const authorProfileUrl = author?.html_url ?? '';
+
+    /** add new fields  */
+    const userMessage  = commit.data.commit.message
 
     const authorLine = authorProfileUrl
         ? `**${authorName}** [(@${authorLogin})](${authorProfileUrl})`
@@ -106,8 +106,8 @@ export function createAdaptiveCard(
                         value: repoName
                     },
                     {
-                        title: 'PR Number',
-                        value: `#${prNum}`
+                        title: 'Message',
+                        value: `#${userMessage}`
                     },
                     {
                         title: 'Commit',

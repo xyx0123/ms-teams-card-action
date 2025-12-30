@@ -42,8 +42,8 @@ async function run(): Promise<void> {
     const commit = await octokit.repos.getCommit(params);
     const author = commit.data.author;
 
-    console.log(prNum)
-    console.log(commit);
+    console.log("prNum:", prNum)
+    console.log("commit:", commit);
 
     // const messageCard = await createMessageCard(
     //   notificationSummary,
@@ -70,8 +70,7 @@ async function run(): Promise<void> {
         sha,
         repoUrl,
         timestamp,
-        prNum,
-        enterpriseUrl
+        prNum
     );
 
     console.log(messageCard);
