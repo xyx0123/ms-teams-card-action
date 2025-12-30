@@ -13,7 +13,7 @@ export function createAdaptiveCard(
 ): any {
     const authorLogin = author?.login ?? 'unknown';
 
-    const avatarUrl = commit.data.author?.avatar_url;
+    const avatarUrl = "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png";
     
     console.log("avatarUrl",avatarUrl);
 
@@ -30,7 +30,7 @@ export function createAdaptiveCard(
     return {
         type: 'AdaptiveCard',
         $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
-        version: '1.4',
+        version: '1.5',
         body: [
             /* ===== 标题 ===== */
             {
@@ -107,7 +107,7 @@ export function createAdaptiveCard(
                     },
                     {
                         title: 'Message',
-                        value: `#${userMessage}`
+                        value: `${userMessage}`
                     },
                     {
                         title: 'Commit',
