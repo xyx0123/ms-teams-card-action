@@ -13,7 +13,7 @@ export function createAdaptiveCard(
 ): any {
     const authorLogin = author?.login ?? 'unknown';
 
-    const avatar_url = author?.avatar_url ? author.avatar_url : 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png';
+    const avatar_url = 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png';
     
     console.log("avatarUrl",avatar_url);
 
