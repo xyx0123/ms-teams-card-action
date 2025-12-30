@@ -44,7 +44,7 @@ async function run(): Promise<void> {
 
     console.log("octokitResponse:", octokitResponse);
      
-    const messageCard = cardType ?
+    const messageCard = cardType =='message card' ?
     await createMessageCard(
       notificationSummary,
       notificationColor,
