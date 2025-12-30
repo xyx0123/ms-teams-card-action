@@ -6,6 +6,7 @@ import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 
 import { createMessageCard } from './message-card';
+import { createAdaptiveCard } from './adaptive-card';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -32,21 +33,22 @@ async function run(): Promise<void> {
     const repoName = `${params.owner}/${params.repo}`;
 
     const githubHost = core.getInput('github-enterprise-host', { required: false });
+    const cardType = core.getInput('card-type', { required: false });
 
     const repoUrl = `https://${githubHost}/${repoName}`;
     const baseApiUrl = `https://${githubHost}/api/v3`;
 
     const octokit = new Octokit({ baseUrl: baseApiUrl,auth: `token ${githubToken}` });
-    const commit = await octokit.repos.getCommit(params);
-    const author = commit.data.author;
+    const octokitResponse = await octokit.repos.getCommit(params);
+    const author = octokitResponse.data.author;
 
-    console.log(prNum)
-    console.log(commit);
-
-    const messageCard = await createMessageCard(
+    console.log("octokitResponse:", octokitResponse);
+     
+    const messageCard = cardType =='message card' ?
+    await createMessageCard(
       notificationSummary,
       notificationColor,
-      commit,
+      octokitResponse,
       author,
       runNum,
       runId,
@@ -55,9 +57,23 @@ async function run(): Promise<void> {
       repoUrl,
       timestamp,
         prNum,
+    )
+    :
+    await createAdaptiveCard(
+        notificationSummary,
+        notificationColor,
+        octokitResponse,
+        author,
+        runNum,
+        runId,
+        repoName,
+        sha,
+        repoUrl,
+        timestamp,
+        prNum
     );
 
-    console.log(messageCard);
+    console.log(messageCard, messageCard);
 
     const response = await fetch(msTeamsWebhookUri, {
       method: 'POST',
@@ -72,8 +88,8 @@ async function run(): Promise<void> {
       throw new Error(`Failed to send message: ${errorText}`);
     }
 
-    const responseData = await response.json();
-    console.log(responseData);
+    const responseData = await response.text();
+    console.log(responseData,responseData);
     core.debug(responseData);
   } catch (error: any) {
     console.error(error);
