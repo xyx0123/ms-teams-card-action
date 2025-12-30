@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 
-// import { createMessageCard } from './message-card';
+import { createMessageCard } from './message-card';
 import { createAdaptiveCard } from './adaptive-card';
 
 dayjs.extend(utc);
@@ -33,36 +33,36 @@ async function run(): Promise<void> {
     const repoName = `${params.owner}/${params.repo}`;
 
     const githubHost = core.getInput('github-enterprise-host', { required: false });
+    const cardType = core.getInput('card-type', { required: false });
 
-    const enterpriseUrl = `https://${githubHost}`;
     const repoUrl = `https://${githubHost}/${repoName}`;
     const baseApiUrl = `https://${githubHost}/api/v3`;
 
     const octokit = new Octokit({ baseUrl: baseApiUrl,auth: `token ${githubToken}` });
-    const commit = await octokit.repos.getCommit(params);
-    const author = commit.data.author;
+    const octokitResponse = await octokit.repos.getCommit(params);
+    const author = octokitResponse.data.author;
 
-    console.log("prNum:", prNum)
-    console.log("commit:", commit);
-
-    // const messageCard = await createMessageCard(
-    //   notificationSummary,
-    //   notificationColor,
-    //   commit,
-    //   author,
-    //   runNum,
-    //   runId,
-    //   repoName,
-    //   sha,
-    //   repoUrl,
-    //   timestamp,
-    //     prNum,
-    // );
-
-    const messageCard = await createAdaptiveCard(
+    console.log("octokitResponse:", octokitResponse);
+     
+    const messageCard = cardType ?
+    await createMessageCard(
+      notificationSummary,
+      notificationColor,
+      octokitResponse,
+      author,
+      runNum,
+      runId,
+      repoName,
+      sha,
+      repoUrl,
+      timestamp,
+        prNum,
+    )
+    :
+    await createAdaptiveCard(
         notificationSummary,
         notificationColor,
-        commit,
+        octokitResponse,
         author,
         runNum,
         runId,
@@ -73,7 +73,7 @@ async function run(): Promise<void> {
         prNum
     );
 
-    console.log(messageCard);
+    console.log(messageCard, messageCard);
 
     const response = await fetch(msTeamsWebhookUri, {
       method: 'POST',
@@ -89,7 +89,7 @@ async function run(): Promise<void> {
     }
 
     const responseData = await response.text();
-    console.log(responseData);
+    console.log(responseData,responseData);
     core.debug(responseData);
   } catch (error: any) {
     console.error(error);

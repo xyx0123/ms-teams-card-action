@@ -23,7 +23,11 @@ inputs:
     description: 'Enterprise github host'
     required: false
     default: github.com
-
+  card-type:
+    description: 'support two types; true is adaptive card, false is message card'
+    required: false
+    type: boolean
+    default: true
 runs:
   using: 'node20'
   main: 'dist/index.js'

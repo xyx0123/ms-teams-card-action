@@ -1,7 +1,7 @@
 export function createAdaptiveCard(
     notificationSummary: string,
     notificationColor: string, // AdaptiveCard 不支持主题色，保留参数但不使用
-    commit: any,
+    octokitResponse: any,
     author: any,
     runNum: string,
     runId: string,
@@ -13,15 +13,15 @@ export function createAdaptiveCard(
 ): any {
     const authorLogin = author?.login ?? 'unknown';
 
-    const avatarUrl = "https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png";
+    const avatar_url = author?.avatar_url ? author.avatar_url : 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png';
     
-    console.log("avatarUrl",avatarUrl);
+    console.log("avatarUrl",avatar_url);
 
-    const authorName = commit?.data?.commit?.author?.name ?? 'Unknown';
+    const authorName = octokitResponse?.data?.commit?.author?.name ?? 'Unknown';
     const authorProfileUrl = author?.html_url ?? '';
 
     /** add new fields  */
-    const userMessage  = commit.data.commit.message
+    const userMessage  = octokitResponse.data.commit.message
 
     const authorLine = authorProfileUrl
         ? `**${authorName}** [(@${authorLogin})](${authorProfileUrl})`
@@ -47,7 +47,7 @@ export function createAdaptiveCard(
                 text: `New pull request on **${repoName}**`,
                 size: 'Medium',
                 spacing: 'Small',
-                wrap: true
+                wrap: false
             },
 
             /* ===== 作者 + 头像 ===== */
@@ -61,7 +61,7 @@ export function createAdaptiveCard(
                         items: [
                             {
                                 type: 'Image',
-                                url: avatarUrl,
+                                url: avatar_url,
                                 size: 'Medium',
                                 style: 'Person'
                             }
@@ -121,8 +121,10 @@ export function createAdaptiveCard(
         actions: [
             {
                 type: 'Action.OpenUrl',
-                title: '🔍 View Pull Request',
-                url: `${repoUrl}/pull/${prNum}`
+                title: 'Go to Approve',
+                url: `${repoUrl}/pull/${prNum}`,
+                iconUrl: 'icon:AlertOn',
+                style: 'positive'
             }
         ]
     };

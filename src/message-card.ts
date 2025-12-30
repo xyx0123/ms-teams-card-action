@@ -1,7 +1,7 @@
 export function createMessageCard(
   notificationSummary: string,
   notificationColor: string,
-  commit: any,
+  octokitResponse: any,
   author: any,
   runNum: string,
   runId: string,
@@ -11,7 +11,7 @@ export function createMessageCard(
   timestamp: string,
   prNum: string
 ): any {
-  const avatar_url = author?.avatar_url ? author.avatar_url : 'https://www.cdnlogo.com/logos/g/69/github-icon.svg';
+  const avatar_url = author?.avatar_url ? author.avatar_url : 'https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png';
 
   const author_url = author?.login && author.html_url ? `[(@${author.login})](${author.html_url}) ` : '';
 
@@ -25,7 +25,7 @@ export function createMessageCard(
       {
         activityTitle: `New pull request on [${repoName}](${repoUrl})`,
         activityImage: avatar_url,
-        activitySubtitle: `by ${commit.data.commit.author.name} ${author_url}on ${timestamp}`,
+        activitySubtitle: `by ${octokitResponse.data.commit.author.name} ${author_url}on ${timestamp}`,
       },
     ],
     potentialAction: [
