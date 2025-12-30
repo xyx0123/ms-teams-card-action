@@ -5,7 +5,8 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 
-import { createMessageCard } from './message-card';
+// import { createMessageCard } from './message-card';
+import { createAdaptiveCard } from './adaptive-card';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -33,6 +34,7 @@ async function run(): Promise<void> {
 
     const githubHost = core.getInput('github-enterprise-host', { required: false });
 
+    const enterpriseUrl = `https://${githubHost}`;
     const repoUrl = `https://${githubHost}/${repoName}`;
     const baseApiUrl = `https://${githubHost}/api/v3`;
 
@@ -43,18 +45,33 @@ async function run(): Promise<void> {
     console.log(prNum)
     console.log(commit);
 
-    const messageCard = await createMessageCard(
-      notificationSummary,
-      notificationColor,
-      commit,
-      author,
-      runNum,
-      runId,
-      repoName,
-      sha,
-      repoUrl,
-      timestamp,
+    // const messageCard = await createMessageCard(
+    //   notificationSummary,
+    //   notificationColor,
+    //   commit,
+    //   author,
+    //   runNum,
+    //   runId,
+    //   repoName,
+    //   sha,
+    //   repoUrl,
+    //   timestamp,
+    //     prNum,
+    // );
+
+    const messageCard = await createAdaptiveCard(
+        notificationSummary,
+        notificationColor,
+        commit,
+        author,
+        runNum,
+        runId,
+        repoName,
+        sha,
+        repoUrl,
+        timestamp,
         prNum,
+        enterpriseUrl
     );
 
     console.log(messageCard);
@@ -72,7 +89,7 @@ async function run(): Promise<void> {
       throw new Error(`Failed to send message: ${errorText}`);
     }
 
-    const responseData = await response.json();
+    const responseData = await response.text();
     console.log(responseData);
     core.debug(responseData);
   } catch (error: any) {
