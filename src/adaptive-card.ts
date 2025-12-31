@@ -31,6 +31,9 @@ export function createAdaptiveCard(
         type: 'AdaptiveCard',
         $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
         version: '1.5',
+        msTeams: {
+            with: 'full'
+        },
         body: [
             /* ===== 标题 ===== */
             {
@@ -47,7 +50,7 @@ export function createAdaptiveCard(
                 text: `New pull request on **${repoName}**`,
                 size: 'Medium',
                 spacing: 'Small',
-                wrap: false
+                wrap: true
             },
 
             /* ===== 作者 + 头像 ===== */
@@ -76,18 +79,23 @@ export function createAdaptiveCard(
                                 text: authorLine,
                                 size: 'Medium',
                                 weight: 'Bolder',
-                                wrap: true
+                                wrap: true,
+                                height: 'stretch'
                             },
                             {
                                 type: 'TextBlock',
                                 text: timestamp,
                                 isSubtle: true,
                                 spacing: 'Small',
-                                wrap: true
+                                wrap: true,
+                                height: 'stretch'
                             }
-                        ]
+                        ],
+                        bleed: true,
+                        targetWidth: 'AtLeast:Wide'
                     }
-                ]
+                ],
+                bleed: true
             },
 
             /* ===== 分隔线 ===== */
@@ -113,7 +121,8 @@ export function createAdaptiveCard(
                         title: 'Commit',
                         value: sha.substring(0, 7)
                     }
-                ]
+                ],
+                target: 'Wide'
             }
         ],
 
