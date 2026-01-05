@@ -75,12 +75,22 @@ async function run(): Promise<void> {
 
     console.log(messageCard, messageCard);
 
+    // assemble microsoft workflow
+    const payload = {
+      attachments: [
+        {
+          contentType: 'application/vnd.microsoft.card.adaptive',
+          content: messageCard,
+        },
+      ],
+    };
+
     const response = await fetch(msTeamsWebhookUri, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(messageCard),
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
