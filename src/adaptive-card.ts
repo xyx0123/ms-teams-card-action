@@ -31,6 +31,9 @@ export function createAdaptiveCard(
         type: 'AdaptiveCard',
         $schema: 'http://adaptivecards.io/schemas/adaptive-card.json',
         version: '1.5',
+        msTeams: {
+            width: 'full'
+        },
         body: [
             /* ===== 标题 ===== */
             {
@@ -47,7 +50,7 @@ export function createAdaptiveCard(
                 text: `New pull request on **${repoName}**`,
                 size: 'Medium',
                 spacing: 'Small',
-                wrap: false
+                wrap: true
             },
 
             /* ===== 作者 + 头像 ===== */
@@ -87,7 +90,7 @@ export function createAdaptiveCard(
                             }
                         ]
                     }
-                ]
+                ]               
             },
 
             /* ===== 分隔线 ===== */
